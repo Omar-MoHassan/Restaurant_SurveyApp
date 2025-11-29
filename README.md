@@ -1,16 +1,13 @@
-# resturant_review
+A lightweight Flutter app for collecting restaurant feedback. Users can select meals, rate categories, and add text or voice comments. Built with GetX and Supabase, with support for Arabic & English.
 
-A new Flutter project.
+✨ Features
+Meal list fetched from Supabase
+Ratings for multiple categories
+Text & voice comments (speech-to-text)
+Clean, reactive UI with GetX
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+🛠️ Tech Stack
+Flutter (Dart)
+GetX
+Supabase
+Speech-to-Text
