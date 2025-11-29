@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:resturant_review/thank_you_widget.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:resturant_review/restaurant_service.dart';
 
@@ -87,19 +88,14 @@ class _SurveyPageState extends State<SurveyPage> {
     );
 
     if (success) {
-      Get.snackbar(
-        'Thank you!',
-        'Your review has been submitted successfully.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (overallRating > 2) {
+        showFeedbackDialog(context, FeedbackType.good);
+      } else {
+        showFeedbackDialog(context, FeedbackType.bad);
+      }
+
       commentsController.clear();
       recommendController.clear();
-      setState(() {
-        serviceRating = 0;
-        foodRating = 0;
-        overallRating = 0;
-      });
-      Get.back();
     } else {
       Get.snackbar(
         'Error',
@@ -137,56 +133,55 @@ class _SurveyPageState extends State<SurveyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               elevation: 1,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        photo,
-                        width: 130,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            description,
+                    child: Image.network(
+                      photo,
+                      height: 140,
+                      width: Get.width,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
 
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              height: 1.4,
-                              color: Colors.black54,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
 
