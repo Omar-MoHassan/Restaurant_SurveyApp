@@ -118,7 +118,7 @@ class _SurveyPageState extends State<SurveyPage> {
         elevation: 1,
         centerTitle: true,
         title: const Text(
-          "Meals",
+          "Meal Review",
           style: TextStyle(
             color: Colors.black,
             fontSize: 24,
