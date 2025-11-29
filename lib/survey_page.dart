@@ -20,9 +20,9 @@ class _SurveyPageState extends State<SurveyPage> {
 
   final List<String> choices = <String>['Yes', 'No'];
 
-  double serviceRating = 0;
-  double foodRating = 0;
-  double overallRating = 0;
+  final RxDouble serviceRating = 0.0.obs;
+  final RxDouble foodRating = 0.0.obs;
+  final RxDouble overallRating = 0.0.obs;
 
   final SpeechToText speechToText = SpeechToText();
 
@@ -56,7 +56,9 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   Future<void> _submitReview(String mealName) async {
-    if (serviceRating == 0 || foodRating == 0 || overallRating == 0) {
+    if (serviceRating.value == 0 ||
+        foodRating.value == 0 ||
+        overallRating.value == 0) {
       Get.snackbar(
         'Missing Ratings',
         'Please rate service, food, and overall experience.',
@@ -79,9 +81,9 @@ class _SurveyPageState extends State<SurveyPage> {
 
     final bool success = await _restaurantService.sendReview(
       mealName: mealName,
-      serviceRating: serviceRating,
-      foodRating: foodRating,
-      overallRating: overallRating,
+      serviceRating: serviceRating.value,
+      foodRating: foodRating.value,
+      overallRating: overallRating.value,
       comments: comments,
       recommend: recommendValue,
     );
@@ -95,9 +97,9 @@ class _SurveyPageState extends State<SurveyPage> {
       commentsController.clear();
       recommendController.clear();
       setState(() {
-        serviceRating = 0;
-        foodRating = 0;
-        overallRating = 0;
+        serviceRating.value = 0;
+        foodRating.value = 0;
+        overallRating.value = 0;
       });
       Get.back();
     } else {
@@ -113,35 +115,21 @@ class _SurveyPageState extends State<SurveyPage> {
   Widget build(BuildContext context) {
     final String name = Get.arguments['name'];
     final String photo = Get.arguments['photo'];
+    final String description = Get.arguments['description'];
 
     return Scaffold(
       backgroundColor: const Color(0xfffafafa),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: false,
-        title: Row(
-          children: [
-            const Icon(Icons.rate_review, color: Colors.orangeAccent, size: 32),
-            const SizedBox(width: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const Text(
-                  "Your opinion makes our food better!",
-                  style: TextStyle(color: Colors.grey, fontSize: 13),
-                ),
-              ],
-            ),
-          ],
+        elevation: 1,
+        centerTitle: true,
+        title: const Text(
+          "Meals",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
 
@@ -151,18 +139,55 @@ class _SurveyPageState extends State<SurveyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              elevation: 4,
-              shadowColor: Colors.black12,
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              elevation: 1,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  photo,
-                  height: 200,
-                  width: Get.width,
-                  fit: BoxFit.cover,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        photo,
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            description,
+
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              height: 1.4,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -193,7 +218,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     buildRatingRow(
                       label: "Service",
                       onChanged: (value) {
-                        setState(() => serviceRating = value);
+                        setState(() => serviceRating.value = value);
                       },
                     ),
                     const Divider(height: 32),
@@ -201,7 +226,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     buildRatingRow(
                       label: 'Food Quality',
                       onChanged: (value) {
-                        setState(() => foodRating = value);
+                        setState(() => foodRating.value = value);
                       },
                     ),
                     const Divider(height: 32),
@@ -209,7 +234,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     buildRatingRow(
                       label: 'Overall Experience',
                       onChanged: (value) {
-                        setState(() => overallRating = value);
+                        setState(() => overallRating.value = value);
                       },
                     ),
 

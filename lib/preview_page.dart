@@ -50,21 +50,15 @@ class _PreviewPageState extends State<PreviewPage> {
 
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            const Icon(Icons.fastfood, color: Colors.orangeAccent, size: 32),
-            const SizedBox(width: 16),
-            const Text(
-              "Meals",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
-              ),
-            ),
-          ],
+        elevation: 3,
+        centerTitle: true,
+        title: const Text(
+          "Meals",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
 
@@ -92,6 +86,7 @@ class _PreviewPageState extends State<PreviewPage> {
                           arguments: {
                             'photo': photos[index],
                             'name': meals[index],
+                            'description': description[index],
                           },
                         );
                       },
