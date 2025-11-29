@@ -20,9 +20,9 @@ class _SurveyPageState extends State<SurveyPage> {
 
   final List<String> choices = <String>['Yes', 'No'];
 
-  final RxDouble serviceRating = 0.0.obs;
-  final RxDouble foodRating = 0.0.obs;
-  final RxDouble overallRating = 0.0.obs;
+  double serviceRating = 0;
+  double foodRating = 0;
+  double overallRating = 0;
 
   final SpeechToText speechToText = SpeechToText();
 
@@ -56,9 +56,7 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   Future<void> _submitReview(String mealName) async {
-    if (serviceRating.value == 0 ||
-        foodRating.value == 0 ||
-        overallRating.value == 0) {
+    if (serviceRating == 0 || foodRating == 0 || overallRating == 0) {
       Get.snackbar(
         'Missing Ratings',
         'Please rate service, food, and overall experience.',
@@ -81,9 +79,9 @@ class _SurveyPageState extends State<SurveyPage> {
 
     final bool success = await _restaurantService.sendReview(
       mealName: mealName,
-      serviceRating: serviceRating.value,
-      foodRating: foodRating.value,
-      overallRating: overallRating.value,
+      serviceRating: serviceRating,
+      foodRating: foodRating,
+      overallRating: overallRating,
       comments: comments,
       recommend: recommendValue,
     );
@@ -97,9 +95,9 @@ class _SurveyPageState extends State<SurveyPage> {
       commentsController.clear();
       recommendController.clear();
       setState(() {
-        serviceRating.value = 0;
-        foodRating.value = 0;
-        overallRating.value = 0;
+        serviceRating = 0;
+        foodRating = 0;
+        overallRating = 0;
       });
       Get.back();
     } else {
@@ -154,7 +152,7 @@ class _SurveyPageState extends State<SurveyPage> {
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
                         photo,
-                        width: 120,
+                        width: 130,
                         height: 120,
                         fit: BoxFit.cover,
                       ),
@@ -218,7 +216,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     buildRatingRow(
                       label: "Service",
                       onChanged: (value) {
-                        setState(() => serviceRating.value = value);
+                        setState(() => serviceRating = value);
                       },
                     ),
                     const Divider(height: 32),
@@ -226,7 +224,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     buildRatingRow(
                       label: 'Food Quality',
                       onChanged: (value) {
-                        setState(() => foodRating.value = value);
+                        setState(() => foodRating = value);
                       },
                     ),
                     const Divider(height: 32),
@@ -234,7 +232,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     buildRatingRow(
                       label: 'Overall Experience',
                       onChanged: (value) {
-                        setState(() => overallRating.value = value);
+                        setState(() => overallRating = value);
                       },
                     ),
 
